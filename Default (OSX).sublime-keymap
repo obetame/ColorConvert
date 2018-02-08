@@ -1,0 +1,3 @@
+[
+  { "keys": ["super+alt+c"], "command": "color_covert","args": {"value": "normal"} }
+]

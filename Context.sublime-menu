@@ -1,0 +1,18 @@
+[
+    {
+        "caption": "-"
+    },
+    {
+        "caption": "ColorCovert",
+        "command": "color_covert",
+        "args": {"value": "normal"}
+    },
+    // {
+    //     "caption": "ColorCovert All",
+    //     "command": "color_covert",
+    //     "args": {"value": "all"}
+    // },
+    {
+        "caption": "-"
+    }
+]
