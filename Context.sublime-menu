@@ -3,15 +3,97 @@
         "caption": "-"
     },
     {
+        "id": "ColorCovert",
         "caption": "ColorCovert",
-        "command": "color_covert",
-        "args": {"value": "normal"}
+        "children": [
+            {
+                "caption": "Covert Selected Section",
+                "command": "color_covert",
+                "args": {"value": "", "isSelect": true}
+            },
+            {
+                "caption": "Covert All",
+                "command": "color_covert",
+                "args": {"value": "", "isSelect": false}
+            },
+            {
+                "caption": "-"
+            },
+            {
+                "caption": "Covert Selected Section To",
+                "children":[
+                    {
+                        "caption": "RGB",
+                        "command": "color_covert",
+                        "args": {"value": "rgb", "isSelect": true},
+                        "checked": true
+                    },
+                    {
+                        "caption": "RGBA",
+                        "command": "color_covert",
+                        "args": {"value": "rgba", "isSelect": true}
+                    },
+                    {
+                        "caption": "HEX",
+                        "command": "color_covert",
+                        "args": {"value": "hex", "isSelect": true}
+                    },
+                    {
+                        "caption": "HSL",
+                        "command": "color_covert",
+                        "args": {"value": "hsl", "isSelect": true}
+                    },
+                    {
+                        "caption": "HSLA",
+                        "command": "color_covert",
+                        "args": {"value": "hsla", "isSelect": true}
+                    }
+                ]
+            },
+            {
+                "caption": "Covert All To",
+                "children":[
+                    {
+                        "caption": "RGB",
+                        "command": "color_covert",
+                        "args": {"value": "rgb", "isSelect": false},
+                        "checked": true
+                    },
+                    {
+                        "caption": "RGBA",
+                        "command": "color_covert",
+                        "args": {"value": "rgba", "isSelect": false}
+                    },
+                    {
+                        "caption": "HEX",
+                        "command": "color_covert",
+                        "args": {"value": "hex", "isSelect": false}
+                    },
+                    {
+                        "caption": "HSL",
+                        "command": "color_covert",
+                        "args": {"value": "hsl", "isSelect": false}
+                    },
+                    {
+                        "caption": "HSLA",
+                        "command": "color_covert",
+                        "args": {"value": "hsla", "isSelect": false}
+                    }
+                ]
+            },
+            {
+                "caption": "-"
+            },
+            {
+                "caption": "Open Settings",
+                "command": "edit_settings", "args":
+                {
+                    "base_file": "${packages}/ColorCovert/ColorCovert.sublime-settings",
+                    "default": "${packages}/User/ColorCovert.sublime-settings"
+                }
+            }
+        ]
     },
-    // {
-    //     "caption": "ColorCovert All",
-    //     "command": "color_covert",
-    //     "args": {"value": "all"}
-    // },
     {
         "caption": "-"
     }
