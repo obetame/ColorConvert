@@ -47,6 +47,16 @@
                         "caption": "HSLA",
                         "command": "color_covert",
                         "args": {"value": "hsla", "isSelect": true}
+                    },
+                    {
+                        "caption": "CMYK",
+                        "command": "color_covert",
+                        "args": {"value": "cmyk", "isSelect": true}
+                    },
+                    {
+                        "caption": "HSV",
+                        "command": "color_covert",
+                        "args": {"value": "hsv", "isSelect": true}
                     }
                 ]
             },
@@ -78,6 +88,16 @@
                         "caption": "HSLA",
                         "command": "color_covert",
                         "args": {"value": "hsla", "isSelect": false}
+                    },
+                    {
+                        "caption": "CMYK",
+                        "command": "color_covert",
+                        "args": {"value": "cmyk", "isSelect": false}
+                    },
+                    {
+                        "caption": "HSV",
+                        "command": "color_covert",
+                        "args": {"value": "hsv", "isSelect": false}
                     }
                 ]
             },

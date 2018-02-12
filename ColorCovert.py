@@ -10,6 +10,7 @@ matchRGBNumber = re.compile( r'\d{1,3}')
 
 """settings"""
 covertModel = 'rgb'
+capitalization = True
 
 class ColorCovertCommand(sublime_plugin.TextCommand):
 	# all value outputs
@@ -25,7 +26,9 @@ class ColorCovertCommand(sublime_plugin.TextCommand):
 		self.view = view
 
 		settings = sublime.load_settings("ColorCovert.sublime-settings")
+		capitalization = settings.get("capitalization")
 		settings.add_on_change("covertModel", loadSettings) # addEventListener for covertModel
+		settings.add_on_change("capitalization", loadSettings) # addEventListener for capitalization
 
 		loadSettings()
 
@@ -33,65 +36,70 @@ class ColorCovertCommand(sublime_plugin.TextCommand):
 	def run(self, edit, value, isSelect):
 		self.outputs = []
 		self.edit = edit
-		selects = self.view.sel()
 
 		if (value != ""):
 			self.innerCovertModel = value
+		else:
+			self.innerCovertModel = covertModel
 
 		# select section entry
 		if isSelect:
-			self.selectModelReplace(selects)
+			self.selectModelReplace(self.view.sel())
 		# all page(todo)
 		else:
-			return
+			self.allReplace()
 
 	def handle(self, selectPart):
 		# selectPart: '#1722DF' or 'rgba(0,0,0,1)' or 'hsla(100, 80.0%, 29.2%, 0.2)'...
 		output = util.covertColor(selectPart, self.innerCovertModel) # core handle function
 
 		if output != None:
+			if capitalization:
+				output = output.upper()
 			self.outputs.append(output)
 
-	def selectModelReplace(self, selects):
+	"""replace view select color"""
+	def selectModelReplace(self, regions):
 		"""covert select section"""
-		if (len(selects) == 1 and selects[0].empty()):
-			return
+		goodSelects = []
+		for region in regions:
+			if not region.empty():
+				goodSelects.append(region)
 
-		for region in selects:
+		for region in goodSelects:
 			self.handle(self.view.substr(region))
 
 		for i, output in enumerate(self.outputs):
-			for j, region in enumerate(selects):
+			for j, region in enumerate(regions):
 				if i == j:
 					self.view.replace(self.edit, region, output)
 
-		self.innerCovertModel = covertModel # recover
+	"""replace view all color"""
+	def allReplace(self):
+		# firstMatchRegion = self.view.find(util.matchRE.get('hex'), 0, sublime.IGNORECASE)
+		# print(firstMatchRegion.empty())
+		for value in ['rgb', 'rgba', 'hsl', 'hsla', 'hex', 'cmyk', 'hsv']:
+			firstMatchRegion = self.view.find(util.matchRE.get(value), 0, sublime.IGNORECASE)
+			allMatchRegin = self.view.find_all(util.matchRE.get(value), sublime.IGNORECASE)
 
-# class ColorCovertModelCommand(sublime_plugin.TextCommand):
-# 	# all value outputs
-# 	outputs = []
-# 	# view and edit
-# 	view = None
-# 	edit = None
-# 	covertModel = None
+			for i in range(len(allMatchRegin)):
+				if firstMatchRegion.empty():
+					break
 
-# 	def run(self, edit, value, isSelect):
-# 		covertModel = value
-# 		self.outputs = []
-# 		self.edit = edit
-# 		selects = self.view.sel()
-
-# 		if isSelect:
-# 			print(value,isSelect)
-# 		else:
-# 			print(value,isSelect)
+				output = util.covertColor(self.view.substr(firstMatchRegion), self.innerCovertModel) # core handle function
+				if output != None:
+					if capitalization:
+						output = output.upper()
+					self.view.replace(self.edit, firstMatchRegion, output)
+				firstMatchRegion = self.view.find(util.matchRE.get('hex'), firstMatchRegion.begin(), sublime.IGNORECASE)
 
 def loadSettings():
 	"""Loads settings from the ColorCovert.sublime-settings file"""
 
 	global covertModel
+	global capitalization
 
 	settings = sublime.load_settings("ColorCovert.sublime-settings")
 
 	covertModel = settings.get("covert_model")
-	print("change model to:", covertModel)
+	capitalization = settings.get("capitalization")

@@ -1,3 +1,4 @@
 {
-    "covert_model": "rgb"
+    "covert_model": "rgb",
+    "capitalization": false
 }
