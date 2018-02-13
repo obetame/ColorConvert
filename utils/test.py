@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from util import *
+from colorName import *
 
 testValue = [{
 	"value": "rgb(81%,89%,12%)",

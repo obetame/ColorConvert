@@ -12,14 +12,6 @@
                 "args": {"value": "", "isSelect": true}
             },
             {
-                "caption": "Covert All",
-                "command": "color_covert",
-                "args": {"value": "", "isSelect": false}
-            },
-            {
-                "caption": "-"
-            },
-            {
                 "caption": "Covert Selected Section To",
                 "children":[
                     {
@@ -59,6 +51,23 @@
                         "args": {"value": "hsv", "isSelect": true}
                     }
                 ]
+            },
+            {
+                "caption": "Covert Selected Color Name",
+                "children":[
+                    {
+                        "caption": "HEX",
+                        "command": "color_covert_name",
+                    }
+                ]
+            },
+            {
+                "caption": "-"
+            },
+            {
+                "caption": "Covert All",
+                "command": "color_covert",
+                "args": {"value": "", "isSelect": false}
             },
             {
                 "caption": "Covert All To",

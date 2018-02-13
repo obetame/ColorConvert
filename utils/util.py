@@ -54,8 +54,8 @@ matchRE = {
 	"hsv": r'hsv\([\s\.\d,%]*\)',
 }
 
-def getSelectValueModel(selectPart):
-	"""user select section value model"""
+def getSelectValueMode(selectPart):
+	"""user select section value mode"""
 	value = selectPart.upper()
 
 	if 'RGBA' in value:
@@ -283,6 +283,10 @@ def RGB2CMYK(selectPart):
 	b = numberArray[2]
 
 	k = round(1 - max(numberArray), 3)
+
+	if 1 - k == 0:
+		return "cmyk(%s,%s,%s,%s)" % (str(0),str(0),str(0),str(1))
+
 	c = round((1 - r - k) / (1 - k), 3)
 	m = round((1 - g - k) / (1 - k), 3)
 	y = round((1 - b - k) / (1 - k), 3)
@@ -320,11 +324,15 @@ https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 """
 def RGB2HSV(selectPart):
 	numberArray = handleRGBValue(selectPart)
+	
+	# remove alpha
+	if len(numberArray) > 3:
+		numberArray = numberArray[:-1]
 
 	r = numberArray[0]
 	g = numberArray[1]
 	b = numberArray[2]
-	h = s = v = None
+	h = s = v = 0
 
 	cmax = max(numberArray)
 	cmin = min(numberArray)
@@ -467,16 +475,16 @@ switcher = {
 	}
 }
 
-def covertColor(selectPart, covertModel):
-	"""value(selectPart) covert to need model(covertModel)"""
-	valueModel = getSelectValueModel(selectPart)
+def covertColor(selectPart, covertMode):
+	"""value(selectPart) covert to need mode(covertMode)"""
+	valueMode = getSelectValueMode(selectPart)
 
-	if valueModel == 'hex':
+	if valueMode == 'hex':
 		length = len(selectPart)
 		if length != 4 and length != 7:
 			return None
 
-	handleObj = switcher.get(valueModel, {})
-	handleFun = handleObj.get(covertModel, lambda value: value)
+	handleObj = switcher.get(valueMode, {})
+	handleFun = handleObj.get(covertMode, lambda value: value)
 
 	return handleFun(selectPart)
