@@ -2,6 +2,8 @@
 
 sublime text 3 plug-in, Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to transform each other.
 
+![DEMO](http://g.recordit.co/Rgi5FuhGaw.gif)
+
 ## Installation
 
 - You can easily install the plug-in through Package Control (https://packagecontrol.io/).
@@ -33,3 +35,4 @@ OR:
 
 1. Do not support css3 color:`transparent` and `currentColor`.
 2. When `RGBA` is converted to other color value(like `RGB`,`HEX`,`HSL` etc...) it will lose the alpha value.
+3. Some values are lost when some precision values are converted to CMYK and HSV, this is the result of the algorithm, so be careful in the process of using it.
