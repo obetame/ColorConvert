@@ -1,4 +1,4 @@
-# ColorCovert
+# ColorConvert
 
 sublime text 3 plug-in, Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to transform each other.
 
@@ -18,17 +18,17 @@ sublime text 3 plug-in, Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to 
 OR:
 
 1. Select a color declaration
-2. Right click and choose `ColorCovert`, click the mode you need to convert.
+2. Right click and choose `ColorConvert`, click the mode you need to convert.
 
 ## Settings
 
-- `covert_mode`: covert to rgba mode
+- `convert_mode`: convert to rgba mode
 - `capitalization`: whether the converted letters need to be capitalized
 
 ## Support
 
-- Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to covert each other.
-- Support [css3 color name](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) covert to `HEX`
+- Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to convert each other.
+- Support [css3 color name](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) convert to `HEX`
 - Support convert the color values in the entire page.
 
 ## Notes

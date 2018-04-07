@@ -3,61 +3,61 @@
         "caption": "-"
     },
     {
-        "id": "ColorCovert",
-        "caption": "ColorCovert",
+        "id": "ColorConvert",
+        "caption": "ColorConvert",
         "children": [
             {
-                "caption": "Covert Selected Section",
-                "command": "color_covert",
+                "caption": "Convert Selected Section",
+                "command": "color_convert",
                 "args": {"value": "", "isSelect": true}
             },
             {
-                "caption": "Covert Selected Section To",
+                "caption": "Convert Selected Section To",
                 "children":[
                     {
                         "caption": "RGB",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "rgb", "isSelect": true},
                         "checked": true
                     },
                     {
                         "caption": "RGBA",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "rgba", "isSelect": true}
                     },
                     {
                         "caption": "HEX",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hex", "isSelect": true}
                     },
                     {
                         "caption": "HSL",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsl", "isSelect": true}
                     },
                     {
                         "caption": "HSLA",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsla", "isSelect": true}
                     },
                     {
                         "caption": "CMYK",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "cmyk", "isSelect": true}
                     },
                     {
                         "caption": "HSV",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsv", "isSelect": true}
                     }
                 ]
             },
             {
-                "caption": "Covert Selected Color Name",
+                "caption": "Convert Selected Color Name",
                 "children":[
                     {
                         "caption": "HEX",
-                        "command": "color_covert_name",
+                        "command": "color_convert_name",
                     }
                 ]
             },
@@ -65,47 +65,47 @@
                 "caption": "-"
             },
             {
-                "caption": "Covert All",
-                "command": "color_covert",
+                "caption": "Convert All",
+                "command": "color_convert",
                 "args": {"value": "", "isSelect": false}
             },
             {
-                "caption": "Covert All To",
+                "caption": "Convert All To",
                 "children":[
                     {
                         "caption": "RGB",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "rgb", "isSelect": false},
                         "checked": true
                     },
                     {
                         "caption": "RGBA",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "rgba", "isSelect": false}
                     },
                     {
                         "caption": "HEX",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hex", "isSelect": false}
                     },
                     {
                         "caption": "HSL",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsl", "isSelect": false}
                     },
                     {
                         "caption": "HSLA",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsla", "isSelect": false}
                     },
                     {
                         "caption": "CMYK",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "cmyk", "isSelect": false}
                     },
                     {
                         "caption": "HSV",
-                        "command": "color_covert",
+                        "command": "color_convert",
                         "args": {"value": "hsv", "isSelect": false}
                     }
                 ]
@@ -117,8 +117,8 @@
                 "caption": "Open Settings",
                 "command": "edit_settings", "args":
                 {
-                    "base_file": "${packages}/ColorCovert/ColorCovert.sublime-settings",
-                    "default": "${packages}/User/ColorCovert.sublime-settings"
+                    "base_file": "${packages}/ColorConvert/ColorConvert.sublime-settings",
+                    "default": "${packages}/User/ColorConvert.sublime-settings"
                 }
             }
         ]

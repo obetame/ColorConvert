@@ -1,6 +1,6 @@
 {
-	"name": "Color Covert",
-	"details": "https://github.com/zhouyuexie/ColorCovert",
+	"name": "Color Convert",
+	"details": "https://github.com/zhouyuexie/ColorConvert",
 	"releases": [
 		{
 			"sublime_text": "*",

@@ -23,7 +23,7 @@ testValue = [{
 		"hsla(66.23,76.24%,19.8%,0.3)",
 		"#51590C",
 		"cmyk(0.09,0,0.865,0.651)",
-		"hsv(73,99.66%,34.9%)"]
+		"hsv(66,86.52%,34.9%)"]
 }, {
 	"value": "rgba(81%,89%,12%,0.3)",
 	"outputs": [
@@ -33,7 +33,7 @@ testValue = [{
 		"hsla(66.23,77.78%,50.5%,0.3)",
 		"#CEE21E",
 		"cmyk(0.09,0,0.865,0.11)",
-		"hsv(73,99.87%,89.0%)"]
+		"hsv(66,86.52%,89.0%)"]
 }, {
 	"value": "rgb(81,89,12)",
 	"outputs": [
@@ -126,29 +126,29 @@ testValue = [{
 		"hsv(400,100%,50%)"]
 }]
 
-covertAllModel = ['rgb', 'rgba', 'hsl', 'hsla', 'hex', 'cmyk', 'hsv']
+convertAllModel = ['rgb', 'rgba', 'hsl', 'hsla', 'hex', 'cmyk', 'hsv']
 
 def test():
 	for test in testValue:
 		value = test['value']
 		outputs = test['outputs']
 		for n in range(7):
-			output = covertColor(value, covertAllModel[n])
+			output = convertColor(value, convertAllModel[n])
 			if (output != outputs[n]):
-				print("Covert color: %s, Output value: %s,\nShould be: %s" % (value, output, outputs[n]))
+				print("Convert color: %s, Output value: %s,\nShould be: %s" % (value, output, outputs[n]))
 			else:
-				# print("Covert color: %s, Output value: %s" % (value, output))
+				# print("Convert color: %s, Output value: %s" % (value, output))
 				pass
 
 def testOne(n):
 	value = testValue[n]['value']
 	outputs = testValue[n]['outputs']
 	for n in range(7):
-		output = covertColor(value, covertAllModel[n])
+		output = convertColor(value, convertAllModel[n])
 		if (output != outputs[n]):
-			print("Covert color: %s, Output value: %s,\nShould be: %s" % (value, output, outputs[n]))
+			print("Convert color: %s, Output value: %s,\nShould be: %s" % (value, output, outputs[n]))
 		else:
-			print("Covert color: %s, Output value: %s" % (value, output))
+			print("Convert color: %s, Output value: %s" % (value, output))
 
 test()
 # testOne(4)

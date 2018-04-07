@@ -475,8 +475,8 @@ switcher = {
 	}
 }
 
-def covertColor(selectPart, covertMode):
-	"""value(selectPart) covert to need mode(covertMode)"""
+def convertColor(selectPart, convertMode):
+	"""value(selectPart) convert to need mode(convertMode)"""
 	valueMode = getSelectValueMode(selectPart)
 
 	if valueMode == 'hex':
@@ -485,6 +485,6 @@ def covertColor(selectPart, covertMode):
 			return None
 
 	handleObj = switcher.get(valueMode, {})
-	handleFun = handleObj.get(covertMode, lambda value: value)
+	handleFun = handleObj.get(convertMode, lambda value: value)
 
 	return handleFun(selectPart)
