@@ -299,3 +299,19 @@ def getColorNameArray():
 
 def getColorNameValue(name):
 	return colorName[name]
+
+def getHexColorNameData():
+	"""get hex and color name dict
+	
+	Returns:
+		dict -- {
+			hex: colorname
+		}
+	"""
+
+	hexsDict = {}
+
+	for key, value in colorName.items():
+		hexsDict[value] = key
+
+	return hexsDict

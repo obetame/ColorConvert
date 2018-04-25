@@ -93,7 +93,10 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 					self.view.replace(self.edit, firstMatchRegion, output)
 				firstMatchRegion = self.view.find(util.matchRE.get(name), firstMatchRegion.end(), sublime.IGNORECASE)
 
-class ColorConvertNameCommand(sublime_plugin.TextCommand):
+class ColorConvertNameToHexCommand(sublime_plugin.TextCommand):
+	"""color name convert to hex
+	"""
+
 	def __init__(self, view):
 		self.view = view
 
@@ -115,6 +118,35 @@ class ColorConvertNameCommand(sublime_plugin.TextCommand):
 
 				if output != name:
 					outputs.append(output)
+
+		for i, output in enumerate(outputs):
+			for j, region in enumerate(regions):
+				if i == j and not region.empty():
+					self.view.replace(self.edit, region, output)
+
+class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
+	"""HEX convert To ColorName"""
+	def __init__(self, view):
+		self.view = view
+
+	# main
+	def run(self, edit):
+		self.edit = edit
+
+		self.covertColorName()
+
+	def covertColorName(self):
+		"""covert color name"""
+		regions = self.view.sel()
+		outputs = []
+		hexsDict = colorName.getHexColorNameData()
+
+		for region in regions:
+			if not region.empty():
+				hexName = self.view.substr(region).upper()
+
+				if hexsDict.get(hexName):
+					outputs.append(hexsDict.get(hexName))
 
 		for i, output in enumerate(outputs):
 			for j, region in enumerate(regions):
