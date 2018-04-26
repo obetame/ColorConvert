@@ -151,7 +151,7 @@ class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 		for i, output in enumerate(outputs):
 			for j, region in enumerate(regions):
 				if i == j and not region.empty():
-					self.view.replace(self.edit, region, output)
+					self.view.replace(self.edit, region, output.lower())
 
 def loadSettings():
 	"""Loads settings from the ColorConvert.sublime-settings file"""
