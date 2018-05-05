@@ -25,6 +25,8 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 	def __init__(self, view):
 		# Load settings
 		self.view = view
+		global convertMode
+		global capitalization
 
 		settings = sublime.load_settings("ColorConvert.sublime-settings")
 		capitalization = settings.get("capitalization")
@@ -74,24 +76,21 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 	"""replace view all color"""
 	def allReplace(self):
 		for name in ['rgb', 'rgba', 'hsl', 'hsla', 'hex', 'cmyk', 'hsv']:
-			firstMatchRegion = self.view.find(util.matchRE.get(name), 0, sublime.IGNORECASE)
+			currentMatchRegion = self.view.find(util.matchRE.get(name), 0, sublime.IGNORECASE)
 			allMatchRegin = self.view.find_all(util.matchRE.get(name), sublime.IGNORECASE)
 
 			if name == self.innerConvertMode:
 				continue
 
 			for i in range(len(allMatchRegin)):
-				if firstMatchRegion.empty():
-					outputs.append(1)
+				if currentMatchRegion.empty():
 					continue
 
-				output = util.convertColor(self.view.substr(firstMatchRegion), self.innerConvertMode) # core handle function
+				output = util.convertColor(self.view.substr(currentMatchRegion), self.innerConvertMode) # core handle function
 				if output != None:
-					if capitalization:
-						output = output.upper()
-					# outputs.append(output)
-					self.view.replace(self.edit, firstMatchRegion, output)
-				firstMatchRegion = self.view.find(util.matchRE.get(name), firstMatchRegion.end(), sublime.IGNORECASE)
+					self.view.replace(self.edit, currentMatchRegion, convertCase(output))
+
+				currentMatchRegion = self.view.find(util.matchRE.get(name), currentMatchRegion.end(), sublime.IGNORECASE)
 
 class ColorConvertNameToHexCommand(sublime_plugin.TextCommand):
 	"""color name convert to hex
@@ -122,7 +121,7 @@ class ColorConvertNameToHexCommand(sublime_plugin.TextCommand):
 		for i, output in enumerate(outputs):
 			for j, region in enumerate(regions):
 				if i == j and not region.empty():
-					self.view.replace(self.edit, region, output)
+					self.view.replace(self.edit, region, convertCase(output))
 
 class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 	"""HEX convert To ColorName"""
@@ -151,7 +150,55 @@ class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 		for i, output in enumerate(outputs):
 			for j, region in enumerate(regions):
 				if i == j and not region.empty():
-					self.view.replace(self.edit, region, output.lower())
+					self.view.replace(self.edit, region, convertCase(output, True))
+
+class ColorConvertAllHexToNameCommand(sublime_plugin.TextCommand):
+	"""all HEX convert To ColorName"""
+	def __init__(self, view):
+		self.view = view
+
+	# main
+	def run(self, edit):
+		self.edit = edit
+
+		self.covertColorName()
+
+	def covertColorName(self):
+		"""covert color name"""
+		currentMatchRegion = self.view.find(util.matchRE.get('hex'), 0, sublime.IGNORECASE)
+		allMatchRegin = self.view.find_all(util.matchRE.get('hex'), sublime.IGNORECASE)
+		hexsDict = colorName.getHexColorNameData()
+
+		for i in range(len(allMatchRegin)):
+			if currentMatchRegion.empty():
+				continue
+
+			select = self.view.substr(currentMatchRegion)
+			if select != None:
+				hexName = hexsDict.get(select.upper()) 
+				if hexName:
+					print(hexName)
+					self.view.replace(self.edit, currentMatchRegion, convertCase(hexName, True))
+
+			currentMatchRegion = self.view.find(util.matchRE.get('hex'), currentMatchRegion.end(), sublime.IGNORECASE)
+
+def convertCase(value, isColorName = False):
+	"""Change case according to configuration
+	
+	Arguments:
+		value {[str]} -- value data.
+		isColorName {boolean} -- color name use Hump uppercase
+	
+	Returns:
+		[str] -- Case value
+	"""
+
+	if capitalization:
+		if isColorName:
+			return colorName.mapColorName.get(value.lower())
+		return value.upper()
+	
+	return value.lower()
 
 def loadSettings():
 	"""Loads settings from the ColorConvert.sublime-settings file"""

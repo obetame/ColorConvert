@@ -30,6 +30,7 @@ OR:
 - Support `RGB`,`RGBA`,`HEX`,`HSL`,`HSLA`,`HSV`,`CMYK` to convert each other.
 - Support [css3 color name](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) convert to `HEX`
 - Support convert the color values in the entire page.
+- Support css color name and hex conversion
 
 ## Notes
 

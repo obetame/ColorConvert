@@ -12,7 +12,7 @@
 				"args": {"value": "", "isSelect": true}
 			},
 			{
-				"caption": "Convert Selected Section To",
+				"caption": "Convert Selected Section ->",
 				"children":[
 					{
 						"caption": "RGB",
@@ -53,14 +53,14 @@
 				]
 			},
 			{
-				"caption": "Covert Selected ColorName_HEX",
+				"caption": "Convert Selected ColorName<->HEX",
 				"children": [
 					{
-						"caption": "ColorName To HEX",
+						"caption": "ColorName -> HEX",
 						"command": "color_convert_name_to_hex"
 					},
 					{
-						"caption": "HEX To ColorName",
+						"caption": "HEX -> ColorName",
 						"command": "color_convert_hex_to_name"
 					}
 				]
@@ -74,7 +74,7 @@
 				"args": {"value": "", "isSelect": false}
 			},
 			{
-				"caption": "Convert All To",
+				"caption": "Convert All ->",
 				"children":[
 					{
 						"caption": "RGB",
@@ -113,6 +113,10 @@
 						"args": {"value": "hsv", "isSelect": false}
 					}
 				]
+			},
+			{
+				"caption": "Convert All Hex->ColorName",
+				"command": "color_convert_all_hex_to_name"
 			},
 			{
 				"caption": "-"
