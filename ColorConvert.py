@@ -177,7 +177,6 @@ class ColorConvertAllHexToNameCommand(sublime_plugin.TextCommand):
 			if select != None:
 				hexName = hexsDict.get(select.upper()) 
 				if hexName:
-					print(hexName)
 					self.view.replace(self.edit, currentMatchRegion, convertCase(hexName, True))
 
 			currentMatchRegion = self.view.find(util.matchRE.get('hex'), currentMatchRegion.end(), sublime.IGNORECASE)
