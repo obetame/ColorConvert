@@ -49,7 +49,7 @@ matchRE = {
 	"rgba": r'rgba\([\s\.\d,%]*\)',
 	"hsl": r'hsl\([\s\.\d,%]*\)',
 	"hsla": r'hsla\([\s\.\d,%]*\)',
-	"hex": r'#[\da-zA-Z]{3,6}',
+	"hex": r'#[\da-zA-Z]{3,8}',
 	"cmyk": r'cmyk\([\s\.\d,%]*\)',
 	"hsv": r'hsv\([\s\.\d,%]*\)',
 }
@@ -74,8 +74,15 @@ def getSelectValueMode(selectPart):
 		return 'hex'
 
 # handle HEX
-def handleHEXValue(selectPart):
-	value = selectPart.split("#")
+def handleHEXValue(part):
+	"""
+		part -- #fff,#ffffff
+		return -- ['f','f','f','f','f','f']
+	"""
+	if '#' not in part:
+		return part
+
+	value = part.split("#")
 	if len(value) <= 1:
 		value = value[0]
 	else:
@@ -83,13 +90,71 @@ def handleHEXValue(selectPart):
 
 	letters = []
 
-	if (len(value) == 3):
+	if len(value) == 3:
 		for letter in value:
 			letters.append(letter.upper())
 			letters.append(letter.upper())
 	else:
 		for letter in value:
 			letters.append(letter.upper())
+
+	return letters
+
+def getHexAlphaValue(part):
+	"""
+		Get hex's transparency value and convert to decimal
+		part -- ['f','f','f','f','f','f','f','f']
+		return -- 1
+	"""
+	value = part[-2:]
+
+	a = mapHEX.get(value[1].upper())
+	b = mapHEX.get(value[0].upper()) * 16
+
+	return round((a + b) / 255.0, 4)
+
+def getRgbaAlphaValue(part):
+	"""
+		Get rgba transparency value and convert to hexadecimal
+		part -- rgba(1,1,1,.5)
+		return '80'
+	"""
+	alpha = float(part.split(',')[-1].replace(')', ''))
+	toDecimal = alpha * 256
+	
+	if alpha == 1.0 or alpha > 1:
+		return 'FF'
+
+	b = int(toDecimal % 16)
+	a = int(toDecimal / 16 % 16)
+
+	return mapRGB.get(a) + mapRGB.get(b)
+
+def handleHEXValueString(part):
+	"""
+		part -- #fff,#ffffff
+		return -- #ffffff
+	"""
+	if '#' not in part:
+		return '#' + part.upper()
+
+	value = part.split("#")
+	if len(value) <= 1:
+		value = value[0]
+	else:
+		value = value[1]
+
+	letters = '#'
+
+	if len(value) == 3:
+		for letter in value:
+			letters += letter.upper()
+			letters += letter.upper()
+	elif len(value) == 6:
+		letters = letters + value.upper()
+	else:
+		# len = 8
+		letters = letters + value.upper()[:-2]
 
 	return letters
 
@@ -134,30 +199,39 @@ def HEX2RGB(selectPart, isAlpha = False, alpha = 1):
 		rgb += str(mapHEX[valueArray[0]] * 16 + mapHEX[valueArray[1]]) + ','
 
 	if isAlpha:
-		return 'rgba(' + rgb[:-1] + "," + str(alpha) + ')'
+		if len(lettersArray) == 8:
+			"""include alpha value"""
+			alphaValue = getHexAlphaValue(lettersArray)
+
+			return 'rgba(' + rgb[:-1] + "," + str(alphaValue) + ')'
+		else:
+			return 'rgba(' + rgb[:-1] + "," + str(alpha) + ')'
 	else:
 		return 'rgb(' + rgb[:-1] + ')'
 
 # RGB to HEX
-def RGB2HEX(selectPart):
+def RGB2HEX(selectPart, isAlpha = False):
 	numberArray = handleRGBValue(selectPart)
 
 	valueArray = []
 	for value in numberArray:
 		valueArray.append(value * 255)
 
-	hex = '#'
+	hexValue = '#'
 	for n in list(range(0,3)):
 		number = valueArray[n]
 		if (number == 0):
-			hex += '00'
+			hexValue += '00'
 			continue
 
 		first = int(number / 16)
 		secend = int(number % 16)
-		hex += (mapRGB[first] + mapRGB[secend])
+		hexValue += (mapRGB[first] + mapRGB[secend])
 
-	return hex
+	if isAlpha and len(numberArray) == 4:
+		hexValue += getRgbaAlphaValue(selectPart)
+
+	return hexValue
 
 # RGB to RGBA
 def RGB_HSL2RGBA_HSLA(selectPart, input, output):
@@ -171,8 +245,8 @@ def RGBA_HSLA2RGB_HSL(selectPart, input, output):
 
 	return ",".join(valueArray).replace(input, output)[:-2] + ")"
 
-# RGB to HSL
 def RGB2HSL(selectPart, isAlpha = False, alpha = 1):
+	# RGB to HSL
 	numberArray = handleRGBValue(selectPart)
 	maxN = max(numberArray)
 	minN = min(numberArray)
@@ -205,22 +279,22 @@ def RGB2HSL(selectPart, isAlpha = False, alpha = 1):
 	else:
 		return "hsl(%s,%s%%,%s%%)" % (str(round(h, 2)), str(round(s * 100, 2)), str(round(l * 100, 2)))
 
-"""RGBA to HSL
-https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-"""
 def RGBA2HSL(selectPart):
+	"""RGBA to HSL
+	https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+	"""
 	value = ','.join(selectPart.split(',')[:-1]) + ")"
 	return RGB2HSL(value)
 
-# RGBA to HSLA
 def RGBA2HSLA(selectPart):
+	# RGBA to HSLA
 	valueArray = selectPart.split(',')
 	value = ','.join(valueArray[:-1]) + ")"
 
 	return RGB2HSL(value, True, valueArray[-1][:-1])
 
-# handle hsl
 def handleHSL(p, q, t):
+	# handle hsl
 	pi = p
 	qi = q
 	ti = t
@@ -237,8 +311,8 @@ def handleHSL(p, q, t):
 		return pi + (qi - pi) * (0.666666666 - ti) * 6
 	return pi
 
-# hsl to rgb
 def HSL2RGB(selectPart, isAlpha = False, alpha = 1):
+	# hsl to rgb
 	valueArray = matchNumber.findall(selectPart)
 
 	r = g = b = None
@@ -268,14 +342,16 @@ def HSL2RGB(selectPart, isAlpha = False, alpha = 1):
 		b = round(handleHSL(p, q, h - 0.33333333) * 255)
 
 	if isAlpha:
+		if len(valueArray) == 4:
+			return "rgba(%d,%d,%d,%s)" % (int(r),int(g),int(b),valueArray[-1])
 		return "rgba(%d,%d,%d,%s)" % (int(r),int(g),int(b),str(alpha))
 	else:
 		return "rgb(%d,%d,%d)" % (int(r),int(g),int(b))
 
-"""RGB TO CMYK
-https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
-"""
 def RGB2CMYK(selectPart):
+	"""RGB TO CMYK
+	https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
+	"""
 	numberArray = handleRGBValue(selectPart)
 
 	r = numberArray[0]
@@ -299,10 +375,10 @@ def RGB2CMYK(selectPart):
 
 	return "cmyk(%s,%s,%s,%s)" % (str(value[0]),str(value[1]),str(value[2]),str(value[3]))
 
-"""CMYK TO RGB
-https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
-"""
 def CMYK2RGB(selectPart, isAlpha = False, alpha = 1):
+	"""CMYK TO RGB
+	https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
+	"""
 	valueArray = matchNumber.findall(selectPart)
 
 	c = float(valueArray[0])
@@ -319,10 +395,10 @@ def CMYK2RGB(selectPart, isAlpha = False, alpha = 1):
 	else:
 		return "rgb(%d,%d,%d)" % (r,g,b)
 
-"""RGB TO HSV
-https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-"""
 def RGB2HSV(selectPart):
+	"""RGB TO HSV
+	https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+	"""
 	numberArray = handleRGBValue(selectPart)
 	
 	# remove alpha
@@ -356,10 +432,10 @@ def RGB2HSV(selectPart):
 
 	return "hsv(%d,%s%%,%s%%)" % (h,str(round(s * 100, 2)),str(round(v * 100, 2)))
 
-"""HSV TO RGB
-https://www.rapidtables.com/convert/color/hsl-to-rgb.html
-"""
 def HSV2RGB(selectPart, isAlpha = False, alpha = 1):
+	"""HSV TO RGB
+	https://www.rapidtables.com/convert/color/hsl-to-rgb.html
+	"""
 	valueArray = matchNumber.findall(selectPart)
 
 	h = float(valueArray[0])
@@ -415,14 +491,14 @@ switcher = {
 		"rgba": lambda value: RGB_HSL2RGBA_HSLA(value, 'rgb', 'rgba'),
 		"hex": RGB2HEX,
 		"hsl": RGB2HSL,
-		"hsla": lambda value: RGB2HSL(value, True, 1),
+		"hsla": lambda value: RGB2HSL(value, isAlpha = True),
 		"cmyk": RGB2CMYK,
 		"hsv": RGB2HSV
 	},
 	"rgba": {
 		"rgb": lambda value: RGBA_HSLA2RGB_HSL(value, 'rgba', 'rgb'),
 		"rgba": lambda value: value,
-		"hex": lambda value: RGB2HEX(RGBA_HSLA2RGB_HSL(value, 'rgba', 'rgb')),
+		"hex": lambda value: RGB2HEX(value, isAlpha = True),
 		"hsl": RGBA2HSL,
 		"hsla": RGBA2HSLA,
 		"cmyk": RGB2CMYK,
@@ -430,7 +506,7 @@ switcher = {
 	},
 	"hsl": {
 		"rgb": HSL2RGB,
-		"rgba": lambda value: HSL2RGB(value, True, 1),
+		"rgba": lambda value: HSL2RGB(value, isAlpha = True),
 		"hex": lambda value: RGB2HEX(HSL2RGB(value)),
 		"hsl": lambda value: value,
 		"hsla": lambda value: RGB_HSL2RGBA_HSLA(value, 'hsl', 'hsla'),
@@ -439,8 +515,8 @@ switcher = {
 	},
 	"hsla": {
 		"rgb": HSL2RGB,
-		"rgba": lambda value: HSL2RGB(value, True),
-		"hex": lambda value: RGB2HEX(HSL2RGB(value)),
+		"rgba": lambda value: HSL2RGB(value, isAlpha = True),
+		"hex": lambda value: RGB2HEX(HSL2RGB(value, isAlpha = True), isAlpha = True),
 		"hsl": lambda value: RGBA_HSLA2RGB_HSL(value, 'hsla', 'hsl'),
 		"hsla": lambda value: value,
 		"cmyk": lambda value: RGB2CMYK(HSL2RGB(value)),
@@ -448,16 +524,16 @@ switcher = {
 	},
 	"hex": {
 		"rgb": HEX2RGB,
-		"rgba": lambda value: HEX2RGB(value, True),
+		"rgba": lambda value: HEX2RGB(value, isAlpha = True),
 		"hex": lambda value: value,
 		"hsl": lambda value: RGB2HSL(HEX2RGB(value)),
-		"hsla": lambda value: RGB_HSL2RGBA_HSLA(RGB2HSL(HEX2RGB(value)), 'hsl', 'hsla'),
+		"hsla": lambda value: RGBA2HSLA(HEX2RGB(value, isAlpha = True)),
 		"cmyk": lambda value: RGB2CMYK(HEX2RGB(value)),
 		"hsv": lambda value: RGB2HSV(HEX2RGB(value))
 	},
 	"cmyk": {
 		"rgb": CMYK2RGB,
-		"rgba": lambda value: CMYK2RGB(value, True),
+		"rgba": lambda value: CMYK2RGB(value, isAlpha = True),
 		"hex": lambda value: RGB2HEX(CMYK2RGB(value)),
 		"hsl": lambda value: RGB2HSL(CMYK2RGB(value)),
 		"hsla": lambda value: RGB_HSL2RGBA_HSLA(RGB2HSL(CMYK2RGB(value)), 'hsl', 'hsla'),
@@ -466,7 +542,7 @@ switcher = {
 	},
 	"hsv": {
 		"rgb": HSV2RGB,
-		"rgba": lambda value: HSV2RGB(value, True),
+		"rgba": lambda value: HSV2RGB(value, isAlpha = True),
 		"hex": lambda value: RGB2HEX(HSV2RGB(value)),
 		"hsl": lambda value: RGB2HSL(HSV2RGB(value)),
 		"hsla": lambda value: RGB_HSL2RGBA_HSLA(RGB2HSL(HSV2RGB(value)), 'hsl', 'hsla'),
@@ -481,7 +557,7 @@ def convertColor(selectPart, convertMode):
 
 	if valueMode == 'hex':
 		length = len(selectPart)
-		if length != 4 and length != 7:
+		if length != 4 and length != 7 and length != 9:
 			return None
 
 	handleObj = switcher.get(valueMode, {})

@@ -142,7 +142,7 @@ class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 
 		for region in regions:
 			if not region.empty():
-				hexName = self.view.substr(region).upper()
+				hexName = util.handleHEXValueString(self.view.substr(region))
 
 				if hexsDict.get(hexName):
 					outputs.append(hexsDict.get(hexName))
@@ -173,7 +173,8 @@ class ColorConvertAllHexToNameCommand(sublime_plugin.TextCommand):
 			if currentMatchRegion.empty():
 				continue
 
-			select = self.view.substr(currentMatchRegion)
+			select = util.handleHEXValueString(self.view.substr(currentMatchRegion))
+
 			if select != None:
 				hexName = hexsDict.get(select.upper()) 
 				if hexName:
