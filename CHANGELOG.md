@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- 2.3.2
+	- fixed: Output different hex formats based on different 'is_android' configurations
+
 - 2.3.1
 	- Fixed bug with hex containing transparency in different locations on android and css.
 	- Add config "is_android".
