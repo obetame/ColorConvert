@@ -43,6 +43,7 @@ mapRGB = {
 }
 
 matchNumber = re.compile(r'\d*\.*\d{1,3}\%*')
+isAndroidColor = False
 
 matchRE = {
 	"rgb": r'rgb\([\s\.\d,%]*\)',
@@ -76,7 +77,7 @@ def getSelectValueMode(selectPart):
 # handle HEX
 def handleHEXValue(part):
 	"""
-		part -- #fff,#ffffff
+		part -- #fff,#ffffff,#ffffff80,#80ffffff etc..
 		return -- ['f','f','f','f','f','f']
 	"""
 	if '#' not in part:
@@ -94,9 +95,16 @@ def handleHEXValue(part):
 		for letter in value:
 			letters.append(letter.upper())
 			letters.append(letter.upper())
-	else:
+	elif len(value) == 6:
 		for letter in value:
 			letters.append(letter.upper())
+	else:
+		if isAndroidColor:
+			for letter in value[2:]:
+				letters.append(letter.upper())
+		else:
+			for letter in value[:-2]:
+				letters.append(letter.upper())
 
 	return letters
 
@@ -106,7 +114,10 @@ def getHexAlphaValue(part):
 		part -- ['f','f','f','f','f','f','f','f']
 		return -- 1
 	"""
-	value = part[-2:]
+	if isAndroidColor:
+		value = part[:2]
+	else:
+		value = part[-2:]
 
 	a = mapHEX.get(value[1].upper())
 	b = mapHEX.get(value[0].upper()) * 16
@@ -130,9 +141,10 @@ def getRgbaAlphaValue(part):
 
 	return mapRGB.get(a) + mapRGB.get(b)
 
-def handleHEXValueString(part):
+def handleHEXValueString(part, isAndroid = False):
 	"""
-		part -- #fff,#ffffff
+		part -- #fff,#ffffff,#ffffff80,#80ffffff etc..
+		isAndroid -- Android color value hex transparency in front
 		return -- #ffffff
 	"""
 	if '#' not in part:
@@ -154,7 +166,10 @@ def handleHEXValueString(part):
 		letters = letters + value.upper()
 	else:
 		# len = 8
-		letters = letters + value.upper()[:-2]
+		if isAndroid:
+			letters = letters + value.upper()[2:]
+		else:
+			letters = letters + value.upper()[:-2]
 
 	return letters
 
@@ -551,8 +566,11 @@ switcher = {
 	}
 }
 
-def convertColor(selectPart, convertMode):
+def convertColor(selectPart, convertMode, isAndroid = False):
 	"""value(selectPart) convert to need mode(convertMode)"""
+	global isAndroidColor
+	isAndroidColor = isAndroid
+
 	valueMode = getSelectValueMode(selectPart)
 
 	if valueMode == 'hex':

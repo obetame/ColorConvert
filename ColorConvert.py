@@ -12,6 +12,7 @@ matchRGBNumber = re.compile( r'\d{1,3}')
 """settings"""
 convertMode = 'rgb'
 capitalization = True
+isAndroid = False
 
 class ColorConvertCommand(sublime_plugin.TextCommand):
 	# all value outputs
@@ -54,7 +55,7 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 
 	def handle(self, selectPart):
 		# selectPart: '#1722DF' or 'rgba(0,0,0,1)' or 'hsla(100, 80.0%, 29.2%, 0.2)'...
-		output = util.convertColor(selectPart, self.innerConvertMode) # core handle function
+		output = util.convertColor(selectPart, self.innerConvertMode, isAndroid) # core handle function
 
 		if output != None:
 			if capitalization:
@@ -86,7 +87,7 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 				if currentMatchRegion.empty():
 					continue
 
-				output = util.convertColor(self.view.substr(currentMatchRegion), self.innerConvertMode) # core handle function
+				output = util.convertColor(self.view.substr(currentMatchRegion), self.innerConvertMode, isAndroid) # core handle function
 				if output != None:
 					self.view.replace(self.edit, currentMatchRegion, convertCase(output))
 
@@ -142,7 +143,7 @@ class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 
 		for region in regions:
 			if not region.empty():
-				hexName = util.handleHEXValueString(self.view.substr(region))
+				hexName = util.handleHEXValueString(self.view.substr(region), isAndroid)
 
 				if hexsDict.get(hexName):
 					outputs.append(hexsDict.get(hexName))
@@ -173,7 +174,7 @@ class ColorConvertAllHexToNameCommand(sublime_plugin.TextCommand):
 			if currentMatchRegion.empty():
 				continue
 
-			select = util.handleHEXValueString(self.view.substr(currentMatchRegion))
+			select = util.handleHEXValueString(self.view.substr(currentMatchRegion), isAndroid)
 
 			if select != None:
 				hexName = hexsDict.get(select.upper()) 
@@ -205,8 +206,10 @@ def loadSettings():
 
 	global convertMode
 	global capitalization
+	global isAndroid
 
 	settings = sublime.load_settings("ColorConvert.sublime-settings")
 
 	convertMode = settings.get("convert_mode")
 	capitalization = settings.get("capitalization")
+	isAndroid = settings.get("is_android")
