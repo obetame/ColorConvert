@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- 2.3.1
+	- Fixed bug with hex containing transparency in different locations on android and css.
+
 - 2.3.0
 	- Support transparent hexadecimal values ​​and rgba, hsla conversion.
 	- Fixed issue where shorthand hexadecimal color values ​​cannot be converted to colorName.
