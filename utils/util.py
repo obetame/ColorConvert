@@ -78,7 +78,7 @@ def getSelectValueMode(selectPart):
 def handleHEXValue(part):
 	"""
 		part -- #fff,#ffffff,#ffffff80,#80ffffff etc..
-		return -- ['f','f','f','f','f','f']
+		return -- ['f','f','f','f','f','f'],['f','f','f','f','f','f','8','0'] etc...
 	"""
 	if '#' not in part:
 		return part
@@ -95,16 +95,13 @@ def handleHEXValue(part):
 		for letter in value:
 			letters.append(letter.upper())
 			letters.append(letter.upper())
-	elif len(value) == 6:
+	elif len(value) == 6 or not isAndroidColor:
 		for letter in value:
 			letters.append(letter.upper())
-	else:
-		if isAndroidColor:
-			for letter in value[2:]:
-				letters.append(letter.upper())
-		else:
-			for letter in value[:-2]:
-				letters.append(letter.upper())
+	elif isAndroidColor:
+		for letter in value[2:]:
+			letters.append(letter.upper())
+		letters.extend(value[:2])
 
 	return letters
 
@@ -114,10 +111,7 @@ def getHexAlphaValue(part):
 		part -- ['f','f','f','f','f','f','f','f']
 		return -- 1
 	"""
-	if isAndroidColor:
-		value = part[:2]
-	else:
-		value = part[-2:]
+	value = part[-2:]
 
 	a = mapHEX.get(value[1].upper())
 	b = mapHEX.get(value[0].upper()) * 16

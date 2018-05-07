@@ -1,4 +1,5 @@
 {
     "convert_mode": "rgb",
-    "capitalization": false
+    "capitalization": false,
+    "is_android": false
 }
