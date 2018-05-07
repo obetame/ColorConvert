@@ -226,7 +226,7 @@ def RGB2HEX(selectPart, isAlpha = False):
 	for value in numberArray:
 		valueArray.append(value * 255)
 
-	hexValue = '#'
+	hexValue = ''
 	for n in list(range(0,3)):
 		number = valueArray[n]
 		if (number == 0):
@@ -238,9 +238,12 @@ def RGB2HEX(selectPart, isAlpha = False):
 		hexValue += (mapRGB[first] + mapRGB[secend])
 
 	if isAlpha and len(numberArray) == 4:
-		hexValue += getRgbaAlphaValue(selectPart)
+		if isAndroidColor:
+			hexValue = getRgbaAlphaValue(selectPart) + hexValue
+		else:
+			hexValue += getRgbaAlphaValue(selectPart)
 
-	return hexValue
+	return '#' + hexValue
 
 # RGB to RGBA
 def RGB_HSL2RGBA_HSLA(selectPart, input, output):
