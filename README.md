@@ -22,8 +22,9 @@ OR:
 
 ## Settings
 
-- `convert_mode`: convert to rgba mode
-- `capitalization`: whether the converted letters need to be capitalized
+- `convert_mode`: convert to rgba mode, default `rgb`
+- `capitalization`: whether the converted letters need to be capitalized, default `false`.
+- `is_android`: Hex containing transparency is not the same format in android and css,if you are a Android Developer, please change it to `true`.
 
 ## Support
 

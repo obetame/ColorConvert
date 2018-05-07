@@ -2,6 +2,7 @@
 
 - 2.3.1
 	- Fixed bug with hex containing transparency in different locations on android and css.
+	- Add config "is_android".
 
 - 2.3.0
 	- Support transparent hexadecimal values ​​and rgba, hsla conversion.
