@@ -1,5 +1,14 @@
 {
-    "convert_mode": "rgb",
-    "capitalization": false,
-    "is_android": false
+	// default convert to rgb
+	"convert_mode": "rgb",
+
+	// convert value default is use capitalization
+	"capitalization": false,
+
+	// hex value is use android model, default to use css model
+	"is_android": false,
+
+	// allow loss transparent in hex_to_colorname.
+	// false: #AARRGGBB or #RRGGBBAA will not be converted
+	"loss_transparent": false
 }

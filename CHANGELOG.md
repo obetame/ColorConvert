@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- 2.3.3
+	- add config `loss_transparent`: allow loss transparent in hex_to_colorname.
+
 - 2.3.2
 	- fixed: Output different hex formats based on different 'is_android' configurations
 

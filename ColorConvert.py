@@ -13,6 +13,7 @@ matchRGBNumber = re.compile( r'\d{1,3}')
 convertMode = 'rgb'
 capitalization = True
 isAndroid = False
+lossTransparent = False
 
 class ColorConvertCommand(sublime_plugin.TextCommand):
 	# all value outputs
@@ -28,11 +29,16 @@ class ColorConvertCommand(sublime_plugin.TextCommand):
 		self.view = view
 		global convertMode
 		global capitalization
+		global isAndroid
+		global loss_transparent
 
 		settings = sublime.load_settings("ColorConvert.sublime-settings")
 		capitalization = settings.get("capitalization")
+		lossTransparent = settings.get("loss_transparent")
 		settings.add_on_change("convertMode", loadSettings) # addEventListener for convertMode
 		settings.add_on_change("capitalization", loadSettings) # addEventListener for capitalization
+		settings.add_on_change("isAndroid", loadSettings)
+		settings.add_on_change("lossTransparent", loadSettings)
 
 		loadSettings()
 
@@ -143,7 +149,7 @@ class ColorConvertHexToNameCommand(sublime_plugin.TextCommand):
 
 		for region in regions:
 			if not region.empty():
-				hexName = util.handleHEXValueString(self.view.substr(region), isAndroid)
+				hexName = util.handleHEXValueString(self.view.substr(region), isAndroid, lossTransparent)
 
 				if hexsDict.get(hexName):
 					outputs.append(hexsDict.get(hexName))
@@ -174,7 +180,7 @@ class ColorConvertAllHexToNameCommand(sublime_plugin.TextCommand):
 			if currentMatchRegion.empty():
 				continue
 
-			select = util.handleHEXValueString(self.view.substr(currentMatchRegion), isAndroid)
+			select = util.handleHEXValueString(self.view.substr(currentMatchRegion), isAndroid, lossTransparent)
 
 			if select != None:
 				hexName = hexsDict.get(select.upper()) 
@@ -207,9 +213,11 @@ def loadSettings():
 	global convertMode
 	global capitalization
 	global isAndroid
+	global lossTransparent
 
 	settings = sublime.load_settings("ColorConvert.sublime-settings")
 
 	convertMode = settings.get("convert_mode")
 	capitalization = settings.get("capitalization")
 	isAndroid = settings.get("is_android")
+	lossTransparent = settings.get("loss_transparent")

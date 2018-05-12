@@ -135,7 +135,7 @@ def getRgbaAlphaValue(part):
 
 	return mapRGB.get(a) + mapRGB.get(b)
 
-def handleHEXValueString(part, isAndroid = False):
+def handleHEXValueString(part, isAndroid = False, lossTransparent = False):
 	"""
 		part -- #fff,#ffffff,#ffffff80,#80ffffff etc..
 		isAndroid -- Android color value hex transparency in front
@@ -156,7 +156,7 @@ def handleHEXValueString(part, isAndroid = False):
 		for letter in value:
 			letters += letter.upper()
 			letters += letter.upper()
-	elif len(value) == 6:
+	elif len(value) == 6 or not lossTransparent:
 		letters = letters + value.upper()
 	else:
 		# len = 8
