@@ -117,17 +117,6 @@
 			{
 				"caption": "Convert All Hex->ColorName",
 				"command": "color_convert_all_hex_to_name"
-			},
-			{
-				"caption": "-"
-			},
-			{
-				"caption": "Open Settings",
-				"command": "edit_settings", "args":
-				{
-					"base_file": "${packages}/ColorConvert/ColorConvert.sublime-settings",
-					"default": "${packages}/User/ColorConvert.sublime-settings"
-				}
 			}
 		]
 	},

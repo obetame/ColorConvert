@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Preferences: ColorConvert Settings",
+        "command": "edit_settings", "args":
+        {
+            "base_file": "${packages}/ColorConvert/ColorConvert.sublime-settings",
+            "default": "// ColorConvert Settings - User\n{\n\t$0\n}\n"
+        }
+    }
+]
