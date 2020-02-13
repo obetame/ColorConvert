@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- 2.3.4
+	- settings accessible via main menu and commands
+
 - 2.3.3
 	- add config `loss_transparent`: allow loss transparent in hex_to_colorname.
 
